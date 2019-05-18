@@ -9,7 +9,7 @@ import cn.taoleduoshop.lock.ZookeeperDistrbuteLock2;
  */
 public class OrderService implements Runnable{
     private OrderNumGenerator orderNumGenerator =new OrderNumGenerator();
-    private Lock lock = new ZookeeperDistrbuteLock2();
+    private Lock lock = new ZookeeperDistrbuteLock();
    @Override
     public void run() {
        getNumber();
@@ -21,7 +21,7 @@ public class OrderService implements Runnable{
           lock.getLock();
           String number = orderNumGenerator.getNumber();
           System.out.println(Thread.currentThread().getName() +
-                  "生成订单id:" + number);
+                  "生成订单id:" + number + Thread.currentThread().getId());
       }catch (Exception e){
           e.printStackTrace();
       }finally {
@@ -30,7 +30,7 @@ public class OrderService implements Runnable{
    }
 
     public static void main(String[] args)  {
-        for (int i =0;i < 150;i++){
+        for (int i =0;i < 250;i++){
            new Thread(new OrderService()).start();
         }
     }
